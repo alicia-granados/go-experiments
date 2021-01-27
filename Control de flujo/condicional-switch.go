@@ -5,7 +5,6 @@ import "fmt"
 func main() {
 
 	switch {
-
 	case 2 == 4, 4 == 8, 9 == 9:
 		fmt.Println("No debería imprimir,ahora sí")
 	case 3 == 3:
@@ -15,8 +14,9 @@ func main() {
 		fmt.Println("No debería imprimir 2")
 	default:
 		fmt.Println("Impriiendo desde el default")
-
 	}
+
+	fmt.Println("")
 
 	switch "Manzana" {
 	case "Pera", "Limón":
@@ -27,4 +27,13 @@ func main() {
 	default:
 		fmt.Println("Imprimiendo desde el default")
 	}
+
+	fmt.Println("")
+	switch {
+	case false:
+		fmt.Println("Falso")
+	case true:
+		fmt.Println("Verdadero")
+	}
+
 }
