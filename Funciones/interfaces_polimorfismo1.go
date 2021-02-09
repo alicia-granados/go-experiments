@@ -1,0 +1,59 @@
+package main
+
+import "fmt"
+
+type persona struct {
+	nombre   string
+	apellido string
+}
+
+type agenteSecreto struct {
+	persona
+	lpm bool
+}
+
+func (a agenteSecreto) presentar() {
+	fmt.Println("Hola,  soy ", a.nombre, a.apellido, "el agente secreto se presenta")
+}
+
+func (p persona) presentar() {
+	fmt.Println("Hola,  soy ", p.nombre, p.apellido, "la persona se presenta")
+}
+
+type humano interface {
+	presentar()
+}
+
+func met2(h humano) {
+	fmt.Println("Fui pasando a la función met2", h)
+}
+func main() {
+
+	as1 := agenteSecreto{
+		persona: persona{
+			nombre:   "Eduard",
+			apellido: "TUa",
+		},
+		lpm: true,
+	}
+
+	as2 := agenteSecreto{
+		persona: persona{
+			nombre:   "Condor",
+			apellido: "Pérez",
+		},
+		lpm: true,
+	}
+
+	p := persona{
+		nombre:   "Carito",
+		apellido: "Guz",
+	}
+
+	fmt.Println(as1)
+	as1.presentar()
+	as2.presentar()
+	met2(as1)
+	met2(as2)
+	met2(p)
+}
