@@ -32,4 +32,28 @@ func main() {
 	fmt.Println(s)
 	fmt.Printf("%T", s)
 
+	fmt.Print("Hola mundo sin salto de linea")
+
+	name := "alex"
+	age := 28
+
+	fmt.Printf("hola me llamo %s y tengo %d años \n", name, age)
+
+	greeting := fmt.Sprintf("hola me llamo %s y tengo %d años ", name, age)
+	fmt.Println(greeting)
+
+	var nombre, apellido string
+	var edad int
+
+	fmt.Println("Ingrese suy nombre:")
+	fmt.Scanln(&nombre, &apellido)
+
+	fmt.Println("Ingrese suy edad:")
+	fmt.Scanln(&edad)
+
+	fmt.Printf("Me llamo %s %s y tengo %d años", name, apellido, age)
+
+	// %v se recomienda usar cuando no se sabe el tipo de dato que se va a ingresar
+	// %T  tipo de dato
+
 }
