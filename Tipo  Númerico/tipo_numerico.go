@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"runtime"
 )
 
@@ -20,7 +21,7 @@ func main() {
 	fmt.Printf("%T\n", y)
 
 	w = 4
-	z = uint8(w)
+	z = uint8(w) // valores positivos
 
 	fmt.Println(w)
 	fmt.Println(z)
@@ -30,5 +31,17 @@ func main() {
 
 	fmt.Println(runtime.GOOS)
 	fmt.Println(runtime.GOARCH)
+
+	var integer int8 = 127
+	fmt.Println((integer))
+
+	var float float32 // numeros pequeños
+	fmt.Println(float)
+
+	fmt.Println(math.MaxFloat32)
+
+	//  valor ascii
+	var a byte = 'a'
+	fmt.Println(a)
 
 }

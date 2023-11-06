@@ -35,4 +35,10 @@ func main() {
 
 	fmt.Printf("Con el  verbo %q indico que se imprima el string %s", "%s", s1)
 
+	fullName := "Alex Roel \t(alias \"roelcode\")\n"
+	fmt.Println(fullName)
+
+	s := "hola"
+	fmt.Println(s[0]) // impirme el valor ASCII
+
 }
