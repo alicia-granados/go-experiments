@@ -22,4 +22,7 @@ func main() {
 
 	myBook3.SetTitle("moby dock( edicion especial)")
 	fmt.Println(myBook3.GetTitle())
+
+	myTextBook := book.NewTexBook("comunicacion", "jaime", 261, "sanrtillaana", "secundaria")
+	myTextBook.PrintInfo3()
 }

@@ -30,3 +30,21 @@ func (b *BookPrivada) GetTitle() string {
 func (b *BookPrivada) PrintInfo2() {
 	fmt.Printf("Tttle: %s\nauthor: %s\npages: %d\n", b.tittle, b.author, b.pages)
 }
+
+type TexBook struct {
+	BookPrivada
+	editorial string
+	level     string
+}
+
+func NewTexBook(title, author string, pages int, editorial, level string) *TexBook {
+	return &TexBook{
+		BookPrivada: BookPrivada{title, author, pages},
+		editorial:   editorial,
+		level:       level,
+	}
+}
+
+func (b *TexBook) PrintInfo3() {
+	fmt.Printf("Tttle: %s\nauthor: %s\npages: %d\n editorial: %s\n nivel: %s", b.tittle, b.author, b.pages, b.editorial, b.level)
+}
