@@ -25,4 +25,8 @@ func main() {
 
 	myTextBook := book.NewTexBook("comunicacion", "jaime", 261, "sanrtillaana", "secundaria")
 	myTextBook.PrintInfo3()
+
+	//book.Print(myBook3)
+	book.Print(myTextBook)
+
 }

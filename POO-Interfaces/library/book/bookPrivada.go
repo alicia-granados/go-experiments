@@ -4,6 +4,14 @@ import (
 	"fmt"
 )
 
+type Printable interface {
+	PrintInfo3()
+}
+
+func Print(p Printable) {
+	p.PrintInfo3()
+}
+
 type BookPrivada struct {
 	tittle string
 	author string
