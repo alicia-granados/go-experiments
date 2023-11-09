@@ -7,6 +7,15 @@ import (
 )
 
 func main() {
+
+	//canalse declara
+	//canal := make(chan int)
+	//envia datos al canal
+	//canal <- 15
+	//RECIBE DATOS DEL CANAL
+	//valor := <-canal
+	//fmt.Println(valor)
+
 	start := time.Now()
 
 	apis := []string{
@@ -18,21 +27,30 @@ func main() {
 		"https://graph.microsoft.com",
 	}
 
+	ch := make(chan string)
+
 	for _, api := range apis {
-		go checkAPI(api)
+		go checkAPI(api, ch)
 	}
 
-	time.Sleep(1 * time.Second)
+	//fmt.Println(ch)
+
+	//time.Sleep(1 * time.Second)
+
+	for i := 0; i < len(apis); i++ {
+		fmt.Print(<-ch)
+	}
 
 	elapsed := time.Since(start)
-	fmt.Printf("Listo , tomo %v segundos\n", elapsed.Seconds())
+	fmt.Printf("Listo , tomo %v segundos\n,", elapsed.Seconds())
 
 }
 
-func checkAPI(api string) {
+func checkAPI(api string, ch chan string) {
 	if _, err := http.Get(api); err != nil {
-		fmt.Printf("error: '%s esta caido!\n", api)
+		//fmt.Printf("error: '%s esta caido!\n", api)
+		ch <- fmt.Sprintf("error: '%s esta caido!\n", api)
 		return
 	}
-	fmt.Printf("SUCCESS: ¡%s esta en funcionamiento!\n", api)
+	ch <- fmt.Sprintf("SUCCESS: ¡%s esta en funcionamiento!\n", api)
 }
