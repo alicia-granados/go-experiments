@@ -24,6 +24,18 @@ func getAlbums(c *gin.Context) {
 	//SERIALIZAR
 	c.IndentedJSON(http.StatusOK, albums)
 }
+
+func postAlbums(c *gin.Context) {
+	var newAlbum album
+	// recibir una estructura -> cargar datos a la esctructura
+	if err := c.BindJSON(&newAlbum); err != nil {
+		return
+	}
+	//agregar al album
+	albums = append(albums, newAlbum)
+	//responder al cliente
+	c.IndentedJSON(http.StatusCreated, newAlbum)
+}
 func main() {
 	fmt.Println("Bienvenido a la api")
 
@@ -36,6 +48,8 @@ func main() {
 		})*/
 
 	router.GET("/albums", getAlbums)
+
+	router.POST("/albums", postAlbums)
 
 	router.Run("localhost:8081")
 }
