@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,16 +20,22 @@ var albums = []album{
 	{ID: "3", Title: "sarah vaughan", Artist: "Sarah", Price: 79.99},
 }
 
+func getAlbums(c *gin.Context) {
+	//SERIALIZAR
+	c.IndentedJSON(http.StatusOK, albums)
+}
 func main() {
 	fmt.Println("Bienvenido a la api")
 
 	router := gin.Default()
+	/*
+		router.GET("/", func(c *gin.Context) {
+			c.JSON(200, gin.H{
+				"message": "Hola mundo",
+			})
+		})*/
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Hola mundo",
-		})
-	})
+	router.GET("/albums", getAlbums)
 
-	router.Run("localhost:8080")
+	router.Run("localhost:8081")
 }
