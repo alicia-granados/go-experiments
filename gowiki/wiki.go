@@ -29,22 +29,21 @@ func loadPage(title string) (*Page, error) {
 func viewHandler(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Path[len("/view/"):]
 	p, _ := loadPage(title)
-	//fmt.Fprintf(w, "<h1>%s</h1> <div>%s</div>", p.Title, p.Body)
-	//cargar plantilla html
-	t, _ := template.ParseFiles("view.html")
-	//ejecutar
-	t.Execute(w, p)
+	renderTemplates(w, "view", p)
+
 }
 
 func editHandler(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Path[len("/edit/"):]
 	p, _ := loadPage(title)
+	renderTemplates(w, "edit", p)
+}
 
+func renderTemplates(w http.ResponseWriter, tmpl string, p *Page) {
 	//cargar plantilla html
-	t, _ := template.ParseFiles("edit.html")
+	t, _ := template.ParseFiles(tmpl + ".html")
 	//ejecutar
 	t.Execute(w, p)
-
 }
 func main() {
 	/*
