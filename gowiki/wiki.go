@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"html/template"
 	"log"
 	"net/http"
@@ -30,6 +29,7 @@ func loadPage(title string) (*Page, error) {
 
 var validPath = regexp.MustCompile("^/(edit|view|save)/([a-zA-Z0-9]+)$")
 
+/*
 func getTitle(w http.ResponseWriter, r *http.Request) (string, error) {
 	m := validPath.FindStringSubmatch(r.URL.Path)
 
@@ -38,13 +38,22 @@ func getTitle(w http.ResponseWriter, r *http.Request) (string, error) {
 		return "", errors.New("Titulo de pagina invalido")
 	}
 	return m[2], nil
+} */
+
+func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		m := validPath.FindStringSubmatch(r.URL.Path)
+
+		if m == nil {
+			http.NotFound(w, r)
+			return
+		}
+		fn(w, r, m[2])
+	}
 }
 
-func viewHandler(w http.ResponseWriter, r *http.Request) {
-	title, err := getTitle(w, r)
-	if err != nil {
-		return
-	}
+func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
+
 	p, err := loadPage(title)
 
 	if err != nil {
@@ -55,11 +64,7 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func editHandler(w http.ResponseWriter, r *http.Request) {
-	title, err := getTitle(w, r)
-	if err != nil {
-		return
-	}
+func editHandler(w http.ResponseWriter, r *http.Request, title string) {
 	p, err := loadPage(title)
 	if err != nil {
 		p = &Page{Title: title}
@@ -67,14 +72,14 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplates(w, "edit", p)
 }
 
-func saveHandler(w http.ResponseWriter, r *http.Request) {
-	title, err := getTitle(w, r)
+func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
+	/*title, err := getTitle(w, r)
 	if err != nil {
 		return
-	}
+	}*/
 	body := r.FormValue("body")
 	p := &Page{Title: title, Body: []byte(body)}
-	err = p.save()
+	err := p.save()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -93,9 +98,9 @@ func renderTemplates(w http.ResponseWriter, tmpl string, p *Page) {
 }
 func main() {
 	//responder al cliente con un mensaje
-	http.HandleFunc("/view/", viewHandler)
-	http.HandleFunc("/edit/", editHandler)
-	http.HandleFunc("/save/", saveHandler)
+	http.HandleFunc("/view/", makeHandler(viewHandler))
+	http.HandleFunc("/edit/", makeHandler(editHandler))
+	http.HandleFunc("/save/", makeHandler(saveHandler))
 	//levantar servidor y regustrar el error
 	log.Fatal(http.ListenAndServe(":8082", nil))
 }
