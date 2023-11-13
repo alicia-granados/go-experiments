@@ -47,6 +47,14 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplates(w, "edit", p)
 }
 
+func saveHandler(w http.ResponseWriter, r *http.Request) {
+	title := r.URL.Path[len("/save/"):]
+	body := r.FormValue("body")
+	p := &Page{Title: title, Body: []byte(body)}
+	p.save()
+	http.Redirect(w, r, "/view/"+title, http.StatusFound)
+}
+
 func renderTemplates(w http.ResponseWriter, tmpl string, p *Page) {
 	//cargar plantilla html
 	t, _ := template.ParseFiles(tmpl + ".html")
@@ -57,6 +65,7 @@ func main() {
 	//responder al cliente con un mensaje
 	http.HandleFunc("/view/", viewHandler)
 	http.HandleFunc("/edit/", editHandler)
+	http.HandleFunc("/save/", saveHandler)
 	//levantar servidor y regustrar el error
 	log.Fatal(http.ListenAndServe(":8082", nil))
 }
