@@ -16,7 +16,7 @@ func main() {
 	fs := http.FileServer(http.Dir("static"))
 
 	// ruta para acceder a los archivos estáticos
-	router.Handle("/static", http.StripPrefix("/static/", fs))
+	router.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	// configurar rutas
 	router.HandleFunc("/", handlers.Index)
