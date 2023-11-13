@@ -26,8 +26,10 @@ func loadPage(title string) (*Page, error) {
 	return &Page{Title: title, Body: body}, nil
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "hola me encantan los %s", r.URL.Path[1:])
+func viewHandler(w http.ResponseWriter, r *http.Request) {
+	title := r.URL.Path[len("/view/"):]
+	p, _ := loadPage(title)
+	fmt.Fprintf(w, "<h1>%s</h1> <div>%s</div>", p.Title, p.Body)
 }
 func main() {
 	/*
@@ -40,7 +42,7 @@ func main() {
 	*/
 
 	//responder al cliente con un mensaje
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/view/", viewHandler)
 
 	//levantar servidor y regustrar el error
 	log.Fatal(http.ListenAndServe(":8080", nil))
