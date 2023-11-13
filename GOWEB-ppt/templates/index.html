@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {{$data:= .}}
-    <title>{{$data.Title}}</title>
-</head>
-<body>
-    <h1>{{$data.Message}}</h1>
-</body>
-</html>
+{{template "base" .}}
+
+{{ define  "title"}} RPS web - Inicio {{end}}
+
+{{define "content"}}
+
+<h1> Bienvenido a piedra, papel o tijera</h1>
+
+{{end}}
