@@ -1,10 +1,12 @@
 package handlers
 
 import (
-	"fmt"
+	"GOWEB-ppt/rps"
+	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 const (
@@ -47,7 +49,15 @@ func Game(w http.ResponseWriter, r *http.Request) {
 }
 
 func Play(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "jugar")
+	playerChoice, _ := strconv.Atoi(r.URL.Query().Get("c"))
+	result := rps.PlayRound(playerChoice)
+	out, err := json.MarshalIndent(result, "", "    ")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
