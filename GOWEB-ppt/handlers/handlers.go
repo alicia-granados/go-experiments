@@ -19,10 +19,12 @@ type Player struct {
 var player Player
 
 func Index(w http.ResponseWriter, r *http.Request) {
+	restartValue()
 	renderTemplate(w, "index.html", nil)
 }
 
 func NewGame(w http.ResponseWriter, r *http.Request) {
+	restartValue()
 	renderTemplate(w, "new-game.html", nil)
 }
 
@@ -35,6 +37,12 @@ func Game(w http.ResponseWriter, r *http.Request) {
 		}
 		player.Name = r.Form.Get("name")
 	}
+
+	// redireccion a  otra ruta
+	if player.Name == "" {
+		http.Redirect(w, r, "/new", http.StatusFound)
+	}
+
 	renderTemplate(w, "game.html", player)
 }
 
@@ -43,6 +51,7 @@ func Play(w http.ResponseWriter, r *http.Request) {
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
+	restartValue()
 	renderTemplate(w, "about.html", nil)
 }
 
@@ -56,4 +65,9 @@ func renderTemplate(w http.ResponseWriter, page string, data any) {
 		log.Println(err)
 		return
 	}
+}
+
+// reiniciar valores
+func restartValue() {
+	player.Name = ""
 }
