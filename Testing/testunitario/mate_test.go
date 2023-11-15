@@ -8,3 +8,25 @@ func TestSuma(t *testing.T) {
 		t.Errorf("SUma incorrecta, tiene %d se esperaba %d", total, 10)
 	}
 }
+
+//nueva forma de testeo
+
+func TestSuma2(t *testing.T) {
+	tabla := []struct {
+		a int
+		b int
+		c int
+	}{
+		{1, 2, 3},
+		{2, 2, 4},
+		{25, 25, 50},
+	}
+
+	for _, item := range tabla {
+		total := Suma(item.a, item.b)
+
+		if total != item.c {
+			t.Errorf("SUma incorrecta, tiene %d se esperaba %d", total, item.c)
+		}
+	}
+}
