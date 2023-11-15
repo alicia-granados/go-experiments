@@ -35,6 +35,15 @@ func TestSuma2(t *testing.T) {
 o crear archivo  go test -coverprofile=coverage.out ,
  ver que funciones estan cubiertas go tool cover -func=coverage.out
  go tool cover -html=coverage.out muestra en el html las funciones que ya han sido cubiertas de color verde
+
+PROFILING: saver donde se esta demorando
+ go test -cpuprofile=cou.out
+ go tool pprof cou.out
+ dentrro del archivo poner :
+ top
+ list Fibonacci
+ web
+ quit salir
 */
 
 func TestGetMax(t *testing.T) {
@@ -53,6 +62,25 @@ func TestGetMax(t *testing.T) {
 
 		if num_may != item.c {
 			t.Errorf("Sel numero mayor , es %d se esperaba %d", num_may, item.c)
+		}
+	}
+}
+
+func TestFibo(t *testing.T) {
+	tabla := []struct {
+		a int
+		b int
+	}{
+		{1, 1},
+		{8, 21},
+		{50, 12586269025},
+	}
+
+	for _, item := range tabla {
+		fib := Fibonacci(item.a)
+
+		if fib != item.b {
+			t.Errorf("Fibonacci , es %d se esperaba %d", fib, item.b)
 		}
 	}
 }
