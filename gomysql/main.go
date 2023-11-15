@@ -11,5 +11,7 @@ func main() {
 	//db.Ping()
 	fmt.Println(db.ExistTable("users"))
 	db.CreateTable(models.UserSchema, "users")
+
+	db.TruncateTable("users")
 	db.Close()
 }
