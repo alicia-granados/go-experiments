@@ -39,7 +39,7 @@ func Ping() {
 // verifica si existe una tabla o no
 func ExistTable(tableName string) bool {
 	sql := fmt.Sprintf("SHOW TABLES LIKE '%s' ", tableName)
-	rows, err := db.Query(sql)
+	rows, err := Query(sql)
 	if err != nil {
 		fmt.Println("Error: ", err)
 	}
@@ -50,9 +50,28 @@ func ExistTable(tableName string) bool {
 // Crea una tabla
 func CreateTable(schema string, name string) {
 	if !ExistTable(name) {
-		_, err := db.Exec(schema)
+		_, err := Exec(schema)
 		if err != nil {
 			fmt.Println("Error: ", err)
 		}
 	}
+}
+
+// NOTA: db.Query o db.Exec ya se pueden usar sin db.tal
+// polimorfismo de Exec
+func Exec(query string, args ...interface{}) (sql.Result, error) {
+	result, err := db.Exec(query, args...)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return result, err
+}
+
+// polimorfismo de Query
+func Query(query string, args ...interface{}) (*sql.Rows, error) {
+	rows, err := db.Query(query, args...)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return rows, err
 }
