@@ -42,8 +42,11 @@ PROFILING: saver donde se esta demorando
  dentrro del archivo poner :
  top
  list Fibonacci
- web
+ web o pdf
  quit salir
+
+ obtemer reportes install :  sudo apt install graphviz
+
 */
 
 func TestGetMax(t *testing.T) {
