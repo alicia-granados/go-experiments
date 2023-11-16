@@ -5,8 +5,8 @@ import (
 )
 
 type User struct {
-	Id       int64  `json:"id"` // `xml:  "id"` Para responder con xml
-	Username string `json:"username"`
+	Id       int64  `json:"id"`       // `xml:  "id"` Para responder con xml
+	Username string `json:"username"` // `xml:  "username"` Para responder con yaml
 	Password string `json:"password"`
 	Email    string `json:"email"`
 }

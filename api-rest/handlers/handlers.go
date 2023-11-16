@@ -12,12 +12,16 @@ func GetUsers(rw http.ResponseWriter, r *http.Request) {
 
 	rw.Header().Set("Content-Type", "application/json")
 	// rw.Header().Set("Content-Type", "text/xml")
+	// en yaml no hay tipo de dato en especifico se va omitir la linea trece
 	db.Connect()
 	users := models.ListUser()
 	db.Close()
+
 	//transformar el objeto a atipo json
 	output, err := json.Marshal(users)
 	//transformar con xml 	->  output, err := xml.Marshal(users)
+	// transformar yaml ->  output, err := yaml.Marshal(users)
+
 	if err != nil {
 		fmt.Println(err)
 	}
