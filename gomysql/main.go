@@ -14,7 +14,10 @@ func main() {
 
 	//db.TruncateTable("users")
 
-	user := models.CreateUser("alexs", "alex1234", "alex@gmail.com")
-	fmt.Println(user)
+	//user := models.CreateUser("alexs", "alex1234", "alex@gmail.com")
+
+	users := models.ListUser()
+	fmt.Println(users)
+
 	db.Close()
 }
