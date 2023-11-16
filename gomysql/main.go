@@ -16,8 +16,10 @@ func main() {
 
 	//user := models.CreateUser("alexs", "alex1234", "alex@gmail.com")
 
-	users := models.ListUser()
-	fmt.Println(users)
+	//users := models.ListUser()
+
+	user := models.GetUser(2)
+	fmt.Println(user)
 
 	db.Close()
 }
