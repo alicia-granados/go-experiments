@@ -26,5 +26,13 @@ func main() {
 	user.Save()
 	fmt.Println(models.ListUser())
 
+	user2 := models.GetUser(1)
+	fmt.Println(user2)
+	user2.Delete()
+	fmt.Println(models.ListUser())
+
+	//db.TruncateTable("users")
+	fmt.Println(models.ListUser())
+
 	db.Close()
 }
