@@ -6,6 +6,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 func GetUsers(rw http.ResponseWriter, r *http.Request) {
@@ -29,7 +32,21 @@ func GetUsers(rw http.ResponseWriter, r *http.Request) {
 }
 
 func GetUser(rw http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(rw, "Obtiene usuario")
+	rw.Header().Set("Content-Type", "application/json")
+	db.Connect()
+
+	//obtener id
+	vars := mux.Vars(r)
+	userId, _ := strconv.Atoi(vars["id"])
+
+	users := models.GetUser(userId)
+	db.Close()
+
+	output, err := json.Marshal(users)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Fprintln(rw, string(output))
 }
 
 func CreateUsers(rw http.ResponseWriter, r *http.Request) {
