@@ -9,6 +9,8 @@ import (
 )
 
 func GetUsers(rw http.ResponseWriter, r *http.Request) {
+
+	rw.Header().Set("Content-Type", "application/json")
 	db.Connect()
 	users := models.ListUser()
 	db.Close()
