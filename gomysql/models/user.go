@@ -66,3 +66,18 @@ func GetUser(id int) *User {
 	}
 	return user
 }
+
+// actualizar registro privado
+func (user *User) update() {
+	sql := "UPDATE users SET  username=?, password= ? , email=? WHERE id=?"
+	db.Exec(sql, user.Username, user.Password, user.Email, user.Id)
+}
+
+// guardar o editar registro - publico
+func (user *User) Save() {
+	if user.Id == 0 {
+		user.insert()
+	} else {
+		user.update()
+	}
+}
