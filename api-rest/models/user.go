@@ -5,7 +5,7 @@ import (
 )
 
 type User struct {
-	Id       int64  `json:"id"`
+	Id       int64  `json:"id"` // `xml:  "id"` Para responder con xml
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Email    string `json:"email"`

@@ -11,11 +11,13 @@ import (
 func GetUsers(rw http.ResponseWriter, r *http.Request) {
 
 	rw.Header().Set("Content-Type", "application/json")
+	// rw.Header().Set("Content-Type", "text/xml")
 	db.Connect()
 	users := models.ListUser()
 	db.Close()
 	//transformar el objeto a atipo json
 	output, err := json.Marshal(users)
+	//transformar con xml 	->  output, err := xml.Marshal(users)
 	if err != nil {
 		fmt.Println(err)
 	}
