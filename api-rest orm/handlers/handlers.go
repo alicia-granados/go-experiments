@@ -1,24 +1,20 @@
 package handlers
 
 import (
+	"apirest-gorm/db"
 	"apirest-gorm/models"
-	"encoding/json"
 	"net/http"
-	"strconv"
-
-	"github.com/gorilla/mux"
 )
 
 func GetUsers(rw http.ResponseWriter, r *http.Request) {
 
-	if users, err := models.ListUser(); err != nil {
-		models.SendNoFound(rw)
-	} else {
-		models.SendData(rw, users)
-	}
+	users := models.Users{}
+	db.Database.Find(&users)
+	sendData(rw, users, http.StatusOK)
 
 }
 
+/*
 func GetUser(rw http.ResponseWriter, r *http.Request) {
 	if user, err := getUserByRequest(r); err != nil {
 		models.SendNoFound(rw)
@@ -86,3 +82,4 @@ func getUserByRequest(r *http.Request) (models.User, error) {
 		return *user, nil
 	}
 }
+*/
