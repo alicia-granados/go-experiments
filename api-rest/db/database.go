@@ -66,7 +66,9 @@ func TruncateTable(tableName string) {
 // NOTA: db.Query o db.Exec ya se pueden usar sin db.tal
 // polimorfismo de Exec
 func Exec(query string, args ...interface{}) (sql.Result, error) {
+	Connect()
 	result, err := db.Exec(query, args...)
+	Close()
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -75,7 +77,9 @@ func Exec(query string, args ...interface{}) (sql.Result, error) {
 
 // polimorfismo de Query
 func Query(query string, args ...interface{}) (*sql.Rows, error) {
+	Connect()
 	rows, err := db.Query(query, args...)
+	Close()
 	if err != nil {
 		fmt.Println(err)
 	}
