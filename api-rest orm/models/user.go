@@ -13,6 +13,11 @@ type User struct {
 
 type Users []User
 
+func MigrarUser() {
+	//migrar una estructura
+	db.Database.AutoMigrate(User{})
+}
+
 const UserSchema string = `CREATE TABLE users(
 	id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	username VARCHAR(30) NOT NULL,
