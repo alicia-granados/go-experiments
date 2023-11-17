@@ -4,6 +4,9 @@ import (
 	"apirest-gorm/db"
 	"apirest-gorm/models"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 func GetUsers(rw http.ResponseWriter, r *http.Request) {
@@ -14,15 +17,23 @@ func GetUsers(rw http.ResponseWriter, r *http.Request) {
 
 }
 
-/*
 func GetUser(rw http.ResponseWriter, r *http.Request) {
-	if user, err := getUserByRequest(r); err != nil {
-		models.SendNoFound(rw)
-	} else {
-		models.SendData(rw, user)
-	}
+
+	user := getUserById(r)
+	sendData(rw, user, http.StatusOK)
 }
 
+func getUserById(r *http.Request) models.User {
+	//obtener id
+	vars := mux.Vars(r)
+	userId, _ := strconv.Atoi(vars["id"])
+
+	user := models.User{}
+	db.Database.First(&user, userId)
+	return user
+}
+
+/*
 func CreateUsers(rw http.ResponseWriter, r *http.Request) {
 
 	//obtener registro
