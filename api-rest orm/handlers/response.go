@@ -14,7 +14,7 @@ func sendData(rw http.ResponseWriter, data interface{}, status int) {
 	fmt.Fprintln(rw, string(output))
 }
 
-func sedError(rw http.ResponseWriter, status int) {
+func sendError(rw http.ResponseWriter, status int) {
 	rw.WriteHeader(status)
 	fmt.Fprintln(rw, "resouece not found")
 }
