@@ -1,14 +1,83 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
 
 func main() {
-	n := 0
-	//n:= -1
-	//n:= 2
-	_, msg := isPrime(n)
-	fmt.Println(msg)
+
+	//print a welcome message
+	intro()
+
+	//create a channel to indicatre when the user to quit
+	doneChan := make(chan bool)
+
+	//start goroutie to read input and run program
+	go readUserInput(doneChan)
+
+	/// block the done chan get a value
+	<-doneChan
+
+	//close the channel
+	close(doneChan)
+
+	//say goodbye
+	fmt.Println("GoodBye")
+
 }
+
+func readUserInput(doneChan chan bool) {
+	scanner := bufio.NewScanner(os.Stdin)
+
+	for {
+		res, done := checkNumbers(scanner)
+
+		if done {
+			doneChan <- true
+			return
+		}
+
+		fmt.Println(res)
+		prompt()
+	}
+}
+
+func checkNumbers(scanner *bufio.Scanner) (string, bool) {
+	//read user input
+	scanner.Scan()
+
+	//check to see if the user wants to quit
+	if strings.EqualFold(scanner.Text(), "q") {
+		return "", true
+	}
+	// try to cenvert what the user typed into an int
+	numToCheck, err := strconv.Atoi(scanner.Text())
+	if err != nil {
+		return "Please enter a whole number!", false
+	}
+
+	_, msg := isPrime(numToCheck)
+
+	return msg, false
+}
+
+func intro() {
+	fmt.Println("is it Prime?")
+	fmt.Println("------------------------------------")
+	fmt.Println("Enter a whole number, and we'll tell you if it is a prime number or not.Enter q to quit")
+
+	prompt()
+
+}
+
+func prompt() {
+	fmt.Print("->")
+}
+
 func isPrime(n int) (bool, string) {
 	// 0 and 1 not prime by definition
 	if n == 0 || n == 1 {
