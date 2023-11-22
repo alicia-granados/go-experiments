@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"io"
+	"os"
+	"testing"
+)
 
 func Test_isPrime(t *testing.T) {
 	/*result, msg := isPrime(0)
@@ -43,6 +47,34 @@ func Test_isPrime(t *testing.T) {
 		if e.msg != msg {
 			t.Errorf("%s: expected %s but got %s", e.name, e.msg, msg)
 		}
+	}
+
+}
+
+func Test_promt(t *testing.T) {
+	//save a copy os.stdout
+	oldOut := os.Stdout
+
+	// create a read and write pipe(
+	r, w, _ := os.Pipe()
+
+	// set os.stdout to our write pipe
+	os.Stdout = w
+
+	prompt()
+
+	// close our writer
+	_ = w.Close()
+
+	// reset os.stdout to what it was before
+	os.Stdout = oldOut
+
+	// read the output of our prompt() func from our read pipe
+	out, _ := io.ReadAll(r)
+
+	// perform our test
+	if string(out) != "->" {
+		t.Errorf("incorrect prompt: expted -> but got %s", string(out))
 	}
 
 }
