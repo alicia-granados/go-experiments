@@ -12,6 +12,7 @@ func (app *application) routes() http.Handler {
 
 	//registrer middleware
 	mux.Use(middleware.Recoverer)
+	mux.Use(app.addIPToContext)
 
 	// registrer routes
 	mux.Get("/", app.Home)
