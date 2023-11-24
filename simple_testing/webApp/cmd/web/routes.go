@@ -12,7 +12,9 @@ func (app *application) routes() http.Handler {
 
 	//registrer middleware
 	mux.Use(middleware.Recoverer)
+
 	// registrer routes
+	mux.Get("/", app.Home)
 
 	// static assets
 
