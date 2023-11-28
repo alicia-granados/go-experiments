@@ -28,6 +28,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	defer conn.Close()
+
 	app.DB = db.PostgresConn{DB: conn}
 
 	//GET A SESSION MANAGER
