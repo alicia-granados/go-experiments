@@ -10,15 +10,14 @@ import (
 func (app *application) routes() http.Handler {
 	mux := chi.NewRouter()
 
-	//registrer middleware
+	// register middleware
 	mux.Use(middleware.Recoverer)
 	mux.Use(app.addIPToContext)
 	mux.Use(app.Session.LoadAndSave)
 
-	// registrer routes
+	// register routes
 	mux.Get("/", app.Home)
 	mux.Post("/login", app.Login)
-	mux.Get("/user/profile", app.Profile)
 
 	mux.Route("/user", func(mux chi.Router) {
 		mux.Use(app.auth)

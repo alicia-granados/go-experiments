@@ -14,8 +14,9 @@ func Test_application_routes(t *testing.T) {
 		method string
 	}{
 		{"/", "GET"},
-		{"/static/*", "GET"},
 		{"/login", "POST"},
+		{"/user/login", "GET"},
+		{"/static/*", "GET"},
 	}
 
 	mux := app.routes()
@@ -23,7 +24,7 @@ func Test_application_routes(t *testing.T) {
 	chiRoutes := mux.(chi.Routes)
 
 	for _, route := range registered {
-		//check to see if the route exits
+		// check to see if the route exists
 		if !routeExists(route.route, route.method, chiRoutes) {
 			t.Errorf("route %s is not registered", route.route)
 		}
