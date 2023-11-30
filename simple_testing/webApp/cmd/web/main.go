@@ -5,15 +5,16 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"webapp/pkg/data"
 	"webapp/pkg/repository"
-	"webapp/pkg/db"
+	"webapp/pkg/repository/dbrepo"
 
 	"github.com/alexedwards/scs/v2"
 )
 
 type application struct {
 	DSN     string
-	DB      respository/DatabaseRepo //db.PostgresConn
+	DB      repository.DatabaseRepo
 	Session *scs.SessionManager
 }
 
@@ -28,6 +29,7 @@ func main() {
 	flag.Parse()
 
 	conn, err := app.connectToDB()
+
 	if err != nil {
 		log.Fatal(err)
 	}
