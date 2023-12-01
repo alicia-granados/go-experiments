@@ -6,6 +6,9 @@ import (
 	"log"
 	"os"
 	"testing"
+	"time"
+	"webapp/pkg/data"
+	"webapp/pkg/repository"
 
 	_ "github.com/jackc/pgconn"
 	_ "github.com/jackc/pgx/v4"
@@ -20,12 +23,13 @@ var (
 	password = "postgres"
 	dbName   = "users_test"
 	port     = "5435"
-	dsn      = "host=%s port=%s user=%s dbname=%s sslmode=disable timezone=UTC connect_timeout=5"
+	dsn      = "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable timezone=UTC connect_timeout=5"
 )
 
 var resource *dockertest.Resource
 var pool *dockertest.Pool
 var testDB *sql.DB
+var testRepo repository.DatabaseRepo
 
 func TestMain(m *testing.M) {
 	// conect to docker ; fail if docker not running
@@ -76,11 +80,64 @@ func TestMain(m *testing.M) {
 	}
 
 	//populate teh database with empty tables
+	err = createTables()
+	if err != nil {
+		log.Fatalf("error creating tables: %s", err)
+	}
 
+	testRepo = &PostgresDBRepo{DB: testDB}
 	// run test
 	code := m.Run()
 
 	//clean up
 
+	if err := pool.Purge(resource); err != nil {
+		log.Fatalf("could not  purge resource: %s ", err)
+	}
+
 	os.Exit(code)
+}
+
+func createTables() error {
+	tablesSQL, err := os.ReadFile("./testdata/users.sql")
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	_, err = testDB.Exec(string(tablesSQL))
+
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	return nil
+
+}
+
+func Test_pingDB(t *testing.T) {
+	err := testDB.Ping()
+	if err != nil {
+		t.Error("can't ping database")
+	}
+}
+
+func TestPostgresDBRepoInsertUser(t *testing.T) {
+	testUser := data.User{
+		FirstName: "Admin",
+		LastName:  "User",
+		Email:     "admin@example.com",
+		Password:  "secret",
+		IsAdmin:   1,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+
+	id, err := testRepo.InsertUser(testUser)
+
+	if err != nil {
+		t.Errorf("insert user retorned an error: %s", err)
+	}
+	if id != 1 {
+		t.Errorf("insert user retorned wrong id; expected 1, but got %d", id)
+	}
 }
