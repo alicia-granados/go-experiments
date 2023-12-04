@@ -138,7 +138,7 @@ func (app *application) UploadProfilePic(w http.ResponseWriter, r *http.Request)
 	//create a var of type data.UserImage
 	var i = data.UserImage{
 		UserID:   user.ID,
-		FileName: files[0].OriginalFileNmae,
+		FileName: files[0].OriginalFileName,
 	}
 	//insert the user image into user_images
 	_, err = app.DB.InsertUserImage(i)
@@ -162,7 +162,7 @@ func (app *application) UploadProfilePic(w http.ResponseWriter, r *http.Request)
 }
 
 type UploadedFile struct {
-	OriginalFileNmae string
+	OriginalFileName string
 	FileSize         int64
 }
 
@@ -186,13 +186,13 @@ func (app *application) UploadFiles(r *http.Request, uploadDir string) ([]*Uploa
 				}
 				defer infile.Close()
 
-				uploadedFile.OriginalFileNmae = hdr.Filename
+				uploadedFile.OriginalFileName = hdr.Filename
 
 				var outfile *os.File
 
 				defer outfile.Close()
 
-				if outfile, err = os.Create(filepath.Join(uploadDir, uploadedFile.OriginalFileNmae)); nil != err {
+				if outfile, err = os.Create(filepath.Join(uploadDir, uploadedFile.OriginalFileName)); nil != err {
 					return nil, err
 				} else {
 					fileSize, err := io.Copy(outfile, infile)
