@@ -53,6 +53,10 @@ func (app *application) render(w http.ResponseWriter, r *http.Request, t string,
 	td.Error = app.Session.PopString(r.Context(), "error")
 	td.Flash = app.Session.PopString(r.Context(), "flash")
 
+	if app.Session.Exists(r.Context(), "user") {
+		td.User = app.Session.Get(r.Context(), "user").(data.User)
+	}
+
 	// execute the template, passing it data, if any
 	err = parsedTemplate.Execute(w, td)
 	if err != nil {
@@ -121,7 +125,7 @@ func (app *application) authenticate(r *http.Request, user *data.User, password 
 
 func (app *application) UploadProfilePic(w http.ResponseWriter, r *http.Request) {
 	//call a function that extracts a file from an upload (request)
-	files, err := app.UploadFiles(r, "./satic/img")
+	files, err := app.UploadFiles(r, "./static/img")
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
