@@ -1,5 +1,6 @@
 package main
 
+//maneja la obtención y verificación de tokens de autenticación JWT (JSON Web Token) a partir de encabezados de solicitud HTTP.
 import (
 	"errors"
 	"fmt"
@@ -10,19 +11,23 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
+//Define dos constantes que representan el tiempo de expiración de los tokens JWT y de renovación,
 const jwtTokenExpiry = time.Minute * 15
 const refreshTokenExpiry = time.Hour * 24
 
+// para contener un par de tokens (un token de acceso y un token de actualización)
 type TokenPairs struct {
 	Token        string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 }
 
+//representar los reclamos incluidos en los tokens JWT
 type Claims struct {
 	UserName string `json:"name"`
 	jwt.RegisteredClaims
 }
 
+// se encarga de manejar la extracción y verificación del token de acceso de las solicitudes HTTP.
 func (app *application) getTokenFromHeaderandVerify(w http.ResponseWriter, r *http.Request) (string, *Claims, error) {
 
 	//we expect our authorization header to look like this:
