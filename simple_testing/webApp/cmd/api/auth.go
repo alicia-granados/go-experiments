@@ -90,12 +90,13 @@ func (app *application) getTokenFromHeaderandVerify(w http.ResponseWriter, r *ht
 	return token, claims, nil
 }
 
+//se encarga de generar un par de tokens, compuesto por un token de acceso (access_token) y un token de actualización (refresh_token).
 func (app *application) generateTokenPair(user *data.User) (TokenPairs, error) {
 	//create the token
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	//set claims
-	claims := token.Claims(jwt.MapClaims)
+	claims := token.Claims.(jwt.MapClaims)
 	claims["name"] = fmt.Sprintf("%s %s", user.FirstName, user.LastName)
 	claims["sub"] = fmt.Sprint(user.ID)
 	claims["aud"] = app.Domain
@@ -110,23 +111,25 @@ func (app *application) generateTokenPair(user *data.User) (TokenPairs, error) {
 	//set the expiry
 	claims["exp"] = time.Now().Add(jwtTokenExpiry).Unix()
 
-	//create the signed token
+	//create the signed token -Creación del Token de Acceso Firmado:
 	signedAccessToken, err := token.SignedString([]byte(app.JWTSecret))
 	if err != nil {
 		return TokenPairs{}, err
 	}
 
-	//cretae the refresh token
+	//cretae the refresh token -para el token de actualización y se establece el reclamo sub con la identificación del usuario.
 	refreshToken := jwt.New(jwt.SigningMethodHS256)
 	refreshTokenClaims := refreshToken.Claims.(jwt.MapClaims)
 	refreshTokenClaims["sub"] = fmt.Sprint(user.ID)
 
-	//set expiry; must be longer than jwt expiry
+	//set expiry; must be longer than jwt expiry - El token de actualización se firma utilizando la misma clave secreta (JWTSecret). Si hay un error en la firma, se devuelve un error.
 	sigmedRefreshToken, err := refreshToken.SignedString([]byte(app.JWTSecret))
 	if err != nil {
 		return TokenPairs{}, err
 	}
 
+	//Se crea un objeto TokenPairs que contiene el token de acceso y el token de actualización.
+	/* se emiten tokens de acceso para autenticar solicitudes y tokens de actualización para obtener nuevos tokens de acceso después de que estos expiren.*/
 	var tokenPairs = TokenPairs{
 		Token:        signedAccessToken,
 		RefreshToken: sigmedRefreshToken,
