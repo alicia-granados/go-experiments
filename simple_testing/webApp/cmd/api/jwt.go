@@ -15,12 +15,16 @@ func generarJWT() string {
 	// Cargar variables desde el archivo .env
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error cargando el archivo .env")
+
+		log.Fatalf("Error cargando el archivo .env", err)
 	}
 
 	// Clave secreta para firmar el token (cámbiala por tu propia clave secreta)
 	// Acceder a las variables de entorno
 	secretKey := os.Getenv("SECRET_KEY")
+
+	// Imprimir contenido para verificar
+	//fmt.Println("SECRET_KEY:", secretKey)
 
 	// Verificar si la variable está presente
 	if secretKey == "" {
