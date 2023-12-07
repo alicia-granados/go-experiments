@@ -27,7 +27,7 @@ func main() {
 	err := godotenv.Load()
 	if err != nil {
 
-		log.Fatalf("Error cargando el archivo .env", err)
+		log.Fatalf("Error cargando el archivo .env %v", err)
 	}
 
 	// Clave secreta para firmar el token (cámbiala por tu propia clave secreta)
