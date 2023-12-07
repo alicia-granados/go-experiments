@@ -52,29 +52,37 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) refresh(w http.ResponseWriter, r *http.Request) {
+
+	// ParseForm analiza la URL de la solicitud, el cuerpo o los campos de la forma
 	err := r.ParseForm()
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
+	// Obtener el token de actualización del formulario de la solicitud
 	refreshToken := r.Form.Get("refresh_token")
 
+	// Crear una estructura para almacenar las reclamaciones del token
 	claims := &Claims{}
 
+	// Parsear el token de actualización utilizando jwt.ParseWithClaims
 	_, err = jwt.ParseWithClaims(refreshToken, claims, func(t *jwt.Token) (interface{}, error) {
 		return []byte(app.JWTSecret), nil
 	})
+
 	if err != nil {
+		// Si hay un error al analizar el token, devolver un error JSON
 		app.errorJSON(w, err, http.StatusBadRequest)
 		return
 	}
 
+	// Si hay un error al analizar el token, devolver un error JSON
 	if time.Unix(claims.ExpiresAt.Unix(), 0).Sub(time.Now()) > 30*time.Second {
 		app.errorJSON(w, errors.New("refresh token does not need renewed yet"), http.StatusTooEarly)
 	}
 
-	//get the user id from the claims
+	// Obtener el ID de usuario de las reclamaciones
 	userID, err := strconv.Atoi(claims.Subject)
 
 	if err != nil {
@@ -82,6 +90,7 @@ func (app *application) refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Obtener información del usuario desde la base de datos utilizando el ID
 	user, err := app.DB.GetUser(userID)
 
 	if err != nil {
@@ -89,12 +98,14 @@ func (app *application) refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Generar un nuevo par de tokens de acceso y actualización
 	tokenPairs, err := app.generateTokenPair(user)
 	if err != nil {
 		app.errorJSON(w, err, http.StatusBadRequest)
 		return
 	}
 
+	// Establecer una cookie HTTP para el nuevo token de actualización
 	http.SetCookie(w, &http.Cookie{
 		Name:     "__Host-refrresh-token",
 		Path:     "/",
@@ -107,6 +118,7 @@ func (app *application) refresh(w http.ResponseWriter, r *http.Request) {
 		Secure:   true,
 	})
 
+	// Escribir la respuesta JSON con el nuevo par de tokens
 	_ = app.writeJSON(w, http.StatusOK, tokenPairs)
 }
 
