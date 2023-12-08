@@ -67,14 +67,14 @@
     let refresh_token ="";
 
     //get references to UI elements
-    let loginForm= document.getElementaryById("login-form");
+    let loginForm= document.getElementById("login-form");
     let loginBtn = document.getElementById("login")
-    let userBtn= document.getElementaryById("getUserBtn");
-    let userOutput= document.getElementaryById("user-output");
-    let tokenDiv= document.getElementaryById("tokens");
-    let tokenDisplay= document.getElementaryById("token");
-    let refreshTokenDisplay= document.getElementaryById("refresh");
-    let logoutBtn= document.getElementaryById("logout");
+    let userBtn= document.getElementById("getUserBtn");
+    let userOutput= document.getElementById("user-output");
+    let tokensDiv= document.getElementById("tokens");
+    let tokenDisplay= document.getElementById("token");
+    let refreshTokenDisplay= document.getElementById("refresh");
+    let logoutBtn= document.getElementById("logout");
 
     login.addEventListener("click", function(){
         const payload = {
@@ -106,15 +106,15 @@
 
     const setUI = (loggedIn) => {
         if(loggedIn){
-            tokenDiv.classList.remove("d-done")
-            loginForm.classList.add("d-done")
-            logoutBtn.classList.remove("d-done")
+            tokensDiv.classList.remove("d-none")
+            loginForm.classList.add("d-none")
+            logoutBtn.classList.remove("d-none")
             tokenDisplay.innerHTML = access_token
             refreshTokenDisplay.innerHTML = refresh_token
         }else{
-            tokenDiv.classList.add("d-done")
-            loginForm.classList.remove("d-done")
-            logoutBtn.classList.add("d-done")
+            tokensDiv.classList.add("d-none")
+            loginForm.classList.remove("d-none")
+            logoutBtn.classList.add("d-none")
             document.getElementById("password").value = "";
             userOutput.innerHTML =" Nothing from server yet..."
             tokenDisplay.innerHTML="No token!";
