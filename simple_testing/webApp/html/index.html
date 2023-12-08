@@ -61,7 +61,67 @@
 </div>
 
 <script>
+    // we store our access token in memory- the only safe place
 
+    let access_token = "";
+    let refresh_token ="";
+
+    //get references to UI elements
+    let loginForm= document.getElementaryById("login-form");
+    let loginBtn = document.getElementById("login")
+    let userBtn= document.getElementaryById("getUserBtn");
+    let userOutput= document.getElementaryById("user-output");
+    let tokenDiv= document.getElementaryById("tokens");
+    let tokenDisplay= document.getElementaryById("token");
+    let refreshTokenDisplay= document.getElementaryById("refresh");
+    let logoutBtn= document.getElementaryById("logout");
+
+    login.addEventListener("click", function(){
+        const payload = {
+            email: document.getElementById("email").value,
+            password:  document.getElementById("password").value,
+        }
+
+        const requestOptions= {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        }
+
+        fetch("/web/auth", requestOptions)
+            .then((response)=> response.json())
+            .then((data) =>{
+                if (data.access_token){
+                    access_token= data.access_token;
+                    refresh_token =  data.refresh_token;
+                    setUI(true);
+                }
+            }). catch(err =>  {
+                console.log(err)
+            })
+    })
+
+    const setUI = (loggedIn) => {
+        if(loggedIn){
+            tokenDiv.classList.remove("d-done")
+            loginForm.classList.add("d-done")
+            logoutBtn.classList.remove("d-done")
+            tokenDisplay.innerHTML = access_token
+            refreshTokenDisplay.innerHTML = refresh_token
+        }else{
+            tokenDiv.classList.add("d-done")
+            loginForm.classList.remove("d-done")
+            logoutBtn.classList.add("d-done")
+            document.getElementById("password").value = "";
+            userOutput.innerHTML =" Nothing from server yet..."
+            tokenDisplay.innerHTML="No token!";
+            refreshTokenDisplay.innerHTML="no refresh token"
+        }
+
+    }
 </script>
 
 </body>
