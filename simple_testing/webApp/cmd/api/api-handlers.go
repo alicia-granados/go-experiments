@@ -18,37 +18,36 @@ type Credentials struct {
 func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 	var creds Credentials
 
-	//read a json payload
+	// read a json payload
 	err := app.readJSON(w, r, &creds)
 	if err != nil {
 		app.errorJSON(w, errors.New("unauthorized"), http.StatusUnauthorized)
 		return
 	}
 
-	//look up the user by email address
+	// look up the user by email address
 	user, err := app.DB.GetUserByEmail(creds.Username)
 	if err != nil {
 		app.errorJSON(w, errors.New("unauthorized"), http.StatusUnauthorized)
 		return
 	}
 
-	//check password
+	// check password
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(creds.Password))
 	if err != nil {
 		app.errorJSON(w, errors.New("unauthorized"), http.StatusUnauthorized)
 		return
 	}
 
-	//generate tokens
+	// generate tokens
 	tokenPairs, err := app.generateTokenPair(user)
 	if err != nil {
 		app.errorJSON(w, errors.New("unauthorized"), http.StatusUnauthorized)
 		return
 	}
 
-	//send token to user
+	// send token to user
 	_ = app.writeJSON(w, http.StatusOK, tokenPairs)
-
 }
 
 func (app *application) refresh(w http.ResponseWriter, r *http.Request) {
@@ -67,7 +66,7 @@ func (app *application) refresh(w http.ResponseWriter, r *http.Request) {
 	claims := &Claims{}
 
 	// Parsear el token de actualización utilizando jwt.ParseWithClaims
-	_, err = jwt.ParseWithClaims(refreshToken, claims, func(t *jwt.Token) (interface{}, error) {
+	_, err = jwt.ParseWithClaims(refreshToken, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(app.JWTSecret), nil
 	})
 
@@ -80,11 +79,11 @@ func (app *application) refresh(w http.ResponseWriter, r *http.Request) {
 	// Si hay un error al analizar el token, devolver un error JSON
 	if time.Unix(claims.ExpiresAt.Unix(), 0).Sub(time.Now()) > 30*time.Second {
 		app.errorJSON(w, errors.New("refresh token does not need renewed yet"), http.StatusTooEarly)
+		return
 	}
 
 	// Obtener el ID de usuario de las reclamaciones
 	userID, err := strconv.Atoi(claims.Subject)
-
 	if err != nil {
 		app.errorJSON(w, err, http.StatusBadRequest)
 		return
@@ -92,7 +91,6 @@ func (app *application) refresh(w http.ResponseWriter, r *http.Request) {
 
 	// Obtener información del usuario desde la base de datos utilizando el ID
 	user, err := app.DB.GetUser(userID)
-
 	if err != nil {
 		app.errorJSON(w, errors.New("unknown user"), http.StatusBadRequest)
 		return
@@ -107,7 +105,7 @@ func (app *application) refresh(w http.ResponseWriter, r *http.Request) {
 
 	// Establecer una cookie HTTP para el nuevo token de actualización
 	http.SetCookie(w, &http.Cookie{
-		Name:     "__Host-refrresh-token",
+		Name:     "__Host-refresh_token",
 		Path:     "/",
 		Value:    tokenPairs.RefreshToken,
 		Expires:  time.Now().Add(refreshTokenExpiry),
@@ -129,6 +127,7 @@ func (app *application) allUsers(w http.ResponseWriter, r *http.Request) {
 func (app *application) getUser(w http.ResponseWriter, r *http.Request) {
 
 }
+
 func (app *application) updateUser(w http.ResponseWriter, r *http.Request) {
 
 }
@@ -136,6 +135,7 @@ func (app *application) updateUser(w http.ResponseWriter, r *http.Request) {
 func (app *application) deleteUser(w http.ResponseWriter, r *http.Request) {
 
 }
+
 func (app *application) insertUser(w http.ResponseWriter, r *http.Request) {
 
 }

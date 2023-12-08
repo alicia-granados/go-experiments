@@ -17,6 +17,7 @@ func Test_app_getTokenFromHeaderAndVerify(t *testing.T) {
 	}
 
 	tokens, _ := app.generateTokenPair(&testUser)
+
 	var tests = []struct {
 		name          string
 		token         string
@@ -25,17 +26,16 @@ func Test_app_getTokenFromHeaderAndVerify(t *testing.T) {
 		issuer        string
 	}{
 		{"valid", fmt.Sprintf("Bearer %s", tokens.Token), false, true, app.Domain},
-		{"valid expiredd", fmt.Sprintf("Bearer %s", expiredToken), true, true, app.Domain},
+		{"valid expired", fmt.Sprintf("Bearer %s", expiredToken), true, true, app.Domain},
 		{"no header", "", true, false, app.Domain},
-		{"invalid token ", fmt.Sprintf("Bearer %s1", expiredToken), true, true, app.Domain},
-		{"no bearer", fmt.Sprintf("Bearer %s1", tokens.Token), true, true, app.Domain},
+		{"invalid token", fmt.Sprintf("Bearer %s1", tokens.Token), true, true, app.Domain},
+		{"no bearer", fmt.Sprintf("Bear %s1", tokens.Token), true, true, app.Domain},
 		{"three header parts", fmt.Sprintf("Bearer %s 1", tokens.Token), true, true, app.Domain},
 		// make sure the next test is the last one to run
 		{"wrong issuer", fmt.Sprintf("Bearer %s", tokens.Token), true, true, "anotherdomain.com"},
 	}
 
 	for _, e := range tests {
-
 		if e.issuer != app.Domain {
 			app.Domain = e.issuer
 			tokens, _ = app.generateTokenPair(&testUser)
@@ -47,13 +47,13 @@ func Test_app_getTokenFromHeaderAndVerify(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 
-		_, _, err := app.getTokenFromHeaderandVerify(rr, req)
+		_, _, err := app.getTokenFromHeaderAndVerify(rr, req)
 		if err != nil && !e.errorExpected {
-			t.Errorf("%s: did not expected error, but got one - %s", e.name, err.Error())
+			t.Errorf("%s: did not expect error, but got one - %s", e.name, err.Error())
 		}
 
 		if err == nil && e.errorExpected {
-			t.Errorf("%s: expected error, but got one ", e.name)
+			t.Errorf("%s: expected error, but did not get one", e.name)
 		}
 
 		app.Domain = "example.com"
