@@ -137,9 +137,11 @@ func (app *application) allUsers(w http.ResponseWriter, r *http.Request) {
 func (app *application) getUser(w http.ResponseWriter, r *http.Request) {
 	// Extraer el parámetro "userID" de la URL y convertirlo a un entero.
 	userID, err := strconv.Atoi(chi.URLParam(r, "userID"))
+
 	if err != nil {
 		// Si hay un error al convertir el parámetro o si no es un número entero válido, responder con un error JSON y un código de estado HTTP 400 (BadRequest).
 		app.errorJSON(w, err, http.StatusBadRequest)
+		return
 	}
 
 	// Obtener el usuario de la base de datos utilizando el ID obtenido.
@@ -179,14 +181,17 @@ func (app *application) updateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) deleteUser(w http.ResponseWriter, r *http.Request) {
+
 	userID, err := strconv.Atoi(chi.URLParam(r, "userID"))
 	if err != nil {
 		app.errorJSON(w, err, http.StatusBadRequest)
+		return
 	}
 
 	err = app.DB.DeleteUser(userID)
 	if err != nil {
 		app.errorJSON(w, err, http.StatusBadRequest)
+		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)
