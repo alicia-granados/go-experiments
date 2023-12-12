@@ -201,7 +201,7 @@ func Test_app_refreshUsingCookie(t *testing.T) {
 		Name:     "Host-refresh_token",
 		Path:     "/",
 		Value:    tokens.RefreshToken,
-		Expires:  time.Now().Add((refreshTokenExpiry)),
+		Expires:  time.Now().Add(refreshTokenExpiry),
 		MaxAge:   int(refreshTokenExpiry.Seconds()),
 		SameSite: http.SameSiteStrictMode,
 		Domain:   "localhost",
@@ -213,7 +213,7 @@ func Test_app_refreshUsingCookie(t *testing.T) {
 		Name:     "Host-refresh_token",
 		Path:     "/",
 		Value:    "somebadstring",
-		Expires:  time.Now().Add((refreshTokenExpiry)),
+		Expires:  time.Now().Add(refreshTokenExpiry),
 		MaxAge:   int(refreshTokenExpiry.Seconds()),
 		SameSite: http.SameSiteStrictMode,
 		Domain:   "localhost",
@@ -229,6 +229,7 @@ func Test_app_refreshUsingCookie(t *testing.T) {
 	}{
 		{"valid cookie", true, testCookie, http.StatusOK},
 		{"invalid cookie", true, badCookie, http.StatusBadRequest},
+		{"no cookie", false, nil, http.StatusBadRequest},
 	}
 
 	for _, e := range tests {
