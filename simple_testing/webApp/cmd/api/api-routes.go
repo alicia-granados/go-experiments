@@ -23,6 +23,7 @@ func (app *application) routes() http.Handler {
 		mux.Get("/refresh-token", app.refreshUsingCookie)
 
 		//logout
+		mux.Get("/logout", app.deleteRefreshCookie)
 	})
 
 	//authentication routes --auth handler, refresh
