@@ -20,6 +20,7 @@ func (app *application) routes() http.Handler {
 		mux.Post("/auth", app.authenticate)
 
 		//refresh- token
+		mux.Get("/refresh-token", app.refreshUsingCookie)
 
 		//logout
 	})
