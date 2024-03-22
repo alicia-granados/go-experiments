@@ -11,7 +11,7 @@ func main() {
 	message = "Hello from go"
 	print(message)
 
-	var price = 34.4
+	var price float32 = 34.4
 	print(message, price)
 
 	price2 := 34.4
@@ -21,4 +21,7 @@ func main() {
 	print(maxSpeed)
 
 	fmt.Println(url)
+	var isREady bool
+	fmt.Println(isREady)
+
 }
