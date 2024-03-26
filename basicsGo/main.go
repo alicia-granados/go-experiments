@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"basicsGo/data"
+	"fmt"
+)
 
 var name = "Frontend master"
 
@@ -9,4 +12,6 @@ func main() {
 	print("hello from go")
 
 	printData()
+
+	fmt.Println(data.MaxSpeed)
 }
