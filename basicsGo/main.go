@@ -23,6 +23,12 @@ func calculateTaxWithName(price float32) (stateTax float32, cityTax float32) {
 	return stateTax, cityTax
 }
 
+func birthday(pointerAge *int) {
+	fmt.Println(pointerAge)  // memory address
+	fmt.Println(*pointerAge) // value
+	fmt.Printf("The pointer is %v and the value is %v\n", pointerAge, *pointerAge)
+	*pointerAge++
+}
 func main() {
 	fmt.Println("Hello world")
 	print("hello from go")
@@ -36,4 +42,11 @@ func main() {
 	stateTax, cityTax := calculateTax(1000)
 	fmt.Println(stateTax, cityTax)
 	fmt.Println(calculateTaxWithName(300))
+
+	age := 22
+
+	fmt.Println(age)
+	birthday(&age)
+	fmt.Println(age)
+	fmt.Println(&age) // memory address
 }
