@@ -35,3 +35,24 @@ func Types() {
 	distanceMiles := distanceKm.ToMiles()
 	fmt.Println(distanceMiles)
 }
+
+type location string
+
+// global function
+/* func DistanceTo(origin location, destination location) distanceMiles {
+	fmt.Printf("origin %v destination %v", origin, destination)
+	return 10
+} */
+
+// method
+func (origin location) DistanceTo(destination location) distanceMiles {
+	fmt.Printf("origin %v destination %v", origin, destination)
+	return 10.00
+}
+
+func locationTest() {
+	nyc := location("33.42 , 34.34")
+	// DistanceTo(nyc, location("23, -24")) global function
+	nyc.DistanceTo(location("-23,-44"))
+	print(nyc)
+}
