@@ -1,6 +1,7 @@
 package main
 
 import (
+	"files/data"
 	"files/fileutils"
 	"fmt"
 	"os"
@@ -21,4 +22,8 @@ func main() {
 	} else {
 		fmt.Printf("Error panic %v", err)
 	}
+
+	data.Types()
+	/*distance := data.ToKm(200)
+	fmt.Println(distance)*/
 }
