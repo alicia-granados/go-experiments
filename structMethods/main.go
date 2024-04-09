@@ -15,4 +15,7 @@ func main() {
 
 	goCourse := data.Course{Id: 2, Name: "Go fundamentals", Instructor: max}
 	fmt.Printf("%v", goCourse)
+
+	swiftWS := data.NewWorkshop("Swift with ios", max)
+	fmt.Printf("%v", &swiftWS)
 }
