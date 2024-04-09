@@ -12,4 +12,7 @@ func main() {
 
 	kyle := data.NewInstructor("Kyle", "Simpson")
 	fmt.Println(kyle.Print())
+
+	goCourse := data.Course{Id: 2, Name: "Go fundamentals", Instructor: max}
+	fmt.Printf("%v", goCourse)
 }
