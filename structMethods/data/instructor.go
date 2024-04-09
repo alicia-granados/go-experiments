@@ -6,3 +6,7 @@ type Instructor struct {
 	LastName  string
 	Score     int
 }
+
+func NewInstructor(name, lastname string) Instructor {
+	return Instructor{FirstName: name, LastName: lastname}
+}
