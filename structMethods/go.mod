@@ -1,0 +1,3 @@
+module structMethods
+
+go 1.21.5
