@@ -27,4 +27,12 @@ func main() {
 	for _, course := range courses {
 		fmt.Println(course)
 	}
+
+	var things []interface{}
+	things = append(things, "34")
+	things = append(things, 34)
+	things = append(things, swiftWS)
+
+	things[2].(data.Workshop).SignUp()
+	print(things)
 }
